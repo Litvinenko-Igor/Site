@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="uk" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>CarWorld — Твій вибір авто</title>
+
+    <style>
+        :root{
+            --bg: #f6f8fc;
+            --surface: rgba(255,255,255,0.78);
+            --card: rgba(255,255,255,0.92);
+            --border: rgba(15,23,42,0.10);
+            --text: #0f172a;
+            --muted: #64748b;
+
+            --accent: #2563eb;   /* blue */
+            --accent2:#06b6d4;   /* cyan */
+            --accent3:#f97316;   /* orange */
+            --shadow: 0 16px 40px rgba(2,6,23,0.12);
+            --radius: 18px;
+        }
+
+        *{margin:0;padding:0;box-sizing:border-box}
+        html{scroll-behavior:smooth}
+
+        body{
+            font-family: 'Poppins', sans-serif;
+            background:
+                    radial-gradient(900px circle at 10% 0%, rgba(37,99,235,0.18), transparent 55%),
+                    radial-gradient(900px circle at 90% 10%, rgba(6,182,212,0.18), transparent 55%),
+                    radial-gradient(900px circle at 70% 90%, rgba(249,115,22,0.12), transparent 55%),
+                    var(--bg);
+            color: var(--text);
+            overflow-x:hidden;
+        }
+
+        /* === NAV === */
+        nav{
+            position: fixed;
+            top:0; left:0;
+            width:100%;
+            padding: 16px 48px;
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            z-index: 10;
+
+            background: rgba(255,255,255,0.55);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        nav h1{
+            font-size: 1.35em;
+            letter-spacing: 3px;
+            display:flex;
+            align-items:center;
+            gap:10px;
+        }
+
+        .logo-dot{
+            width:10px;height:10px;border-radius:50%;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            box-shadow: 0 0 18px rgba(37,99,235,0.35);
+        }
+
+        .nav-right{
+            display:flex;
+            align-items:center;
+            gap: 18px;
+        }
+
+        nav a{
+            color: var(--text);
+            text-decoration:none;
+            font-weight: 600;
+            opacity: 0.85;
+            transition: opacity .2s ease, transform .2s ease;
+        }
+        nav a:hover{ opacity: 1; transform: translateY(-1px); }
+
+        .nav-link-accent{
+            padding: 9px 14px;
+            border-radius: 999px;
+            border: 1px solid var(--border);
+            background: linear-gradient(135deg, rgba(37,99,235,0.10), rgba(6,182,212,0.10));
+        }
+
+        /* === HERO === */
+        .hero{
+            height: 100vh;
+            width: 100%;
+            background: url('/images/main_car.jpg') center/cover no-repeat;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            flex-direction:column;
+            text-align:center;
+            position:relative;
+            transition: opacity 0.8s ease, filter 0.8s ease;
+        }
+        .hero::after{
+            content:'';
+            position:absolute;
+            inset:0;
+            /* світлий “скляний” шар + легке затемнення */
+            background: linear-gradient(
+                    180deg,
+                    rgba(255,255,255,0.18) 0%,
+                    rgba(0,0,0,0.45) 65%,
+                    rgba(0,0,0,0.55) 100%
+            );
+        }
+        .hero-content{
+            position:relative;
+            z-index:2;
+            animation: fadeIn 1.6s ease;
+            padding: 0 16px;
+        }
+        .hero h1{
+            font-size: clamp(2.6rem, 5vw, 4rem);
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: #fff;
+            text-shadow: 0 20px 40px rgba(0,0,0,0.45);
+        }
+        .hero p{
+            font-size: 1.25em;
+            margin-top: 14px;
+            color: rgba(255,255,255,0.9);
+        }
+        .hero.fade-out{
+            opacity: 0.35;
+            filter: blur(3px);
+        }
+
+        /* === CARS SECTION === */
+        .cars-section{
+            min-height: 100vh;
+            padding: 110px 20px 80px;
+            text-align:center;
+        }
+
+        .cars-section h2{
+            font-size: 2.3em;
+            margin-bottom: 46px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: var(--text);
+            position: relative;
+            display:inline-block;
+            animation: fadeUp 1s ease forwards;
+        }
+
+        .cars-section h2::after{
+            content:'';
+            display:block;
+            height: 4px;
+            width: 65%;
+            margin: 12px auto 0;
+            border-radius: 999px;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            box-shadow: 0 10px 18px rgba(37,99,235,0.20);
+        }
+
+        .car-grid{
+            display:grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 26px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .car-card{
+            border-radius: var(--radius);
+            overflow:hidden;
+            background: var(--card);
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+
+            cursor:pointer;
+            opacity:0;
+            transform: translateY(24px);
+            transition: transform .55s ease, opacity .55s ease, box-shadow .25s ease;
+        }
+        .car-card.visible{ opacity:1; transform: translateY(0); }
+
+        .car-card:hover{
+            transform: translateY(-6px);
+            box-shadow: 0 24px 55px rgba(2,6,23,0.16);
+        }
+
+        .car-card img{
+            width:100%;
+            height: 205px;
+            object-fit: cover;
+            transition: transform .35s ease, filter .35s ease;
+        }
+        .car-card:hover img{
+            transform: scale(1.06);
+            filter: saturate(1.12) contrast(1.05);
+        }
+
+        .car-card .content{
+            padding: 16px 16px 18px;
+            text-align:left;
+        }
+
+        .badge{
+            display:inline-flex;
+            padding: 6px 10px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            border: 1px solid rgba(37,99,235,0.18);
+            background: linear-gradient(135deg, rgba(37,99,235,0.12), rgba(6,182,212,0.12));
+            color: var(--text);
+        }
+
+        .car-card p{
+            margin-top: 10px;
+            color: var(--muted);
+            line-height: 1.55em;
+        }
+
+        /* Filter area */
+        .filter{
+            max-width: 640px;
+            margin: 36px auto 0;
+            padding: 18px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            box-shadow: 0 12px 28px rgba(2,6,23,0.10);
+        }
+
+        .filter p{
+            color: var(--muted);
+            margin-bottom: 12px;
+        }
+
+        .filter-row{
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        label{
+            color: var(--text);
+            font-weight: 600;
+        }
+
+        select{
+            padding: 10px 12px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            background: rgba(255,255,255,0.95);
+            color: var(--text);
+            outline: none;
+            min-width: 220px;
+            font-weight: 600;
+        }
+        select:focus{
+            box-shadow: 0 0 0 4px rgba(37,99,235,0.18);
+            border-color: rgba(37,99,235,0.25);
+        }
+
+        .go-btn{
+            padding: 10px 14px;
+            border-radius: 12px;
+            border: 0;
+            cursor:pointer;
+            font-weight: 800;
+            color: #fff;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            box-shadow: 0 12px 24px rgba(37,99,235,0.18);
+            transition: transform .2s ease;
+        }
+        .go-btn:hover{ transform: translateY(-1px); }
+
+        /* === PROFILE MENU === */
+        .profile{ position:relative; }
+        .avatar{
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            border-radius: 50%;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            cursor:pointer;
+            font-weight: 900;
+            color: #fff;
+            text-transform: uppercase;
+            box-shadow: 0 12px 26px rgba(37,99,235,0.25);
+        }
+
+        .dropdown{
+            position:absolute;
+            right:0;
+            top: 55px;
+            background: rgba(255,255,255,0.9);
+            border: 1px solid var(--border);
+            min-width: 200px;
+            display:none;
+            flex-direction:column;
+            z-index:20;
+            border-radius: 14px;
+            overflow:hidden;
+            box-shadow: 0 16px 40px rgba(2,6,23,0.14);
+        }
+
+        .dropdown p{
+            padding: 12px 14px;
+            border-bottom: 1px solid var(--border);
+            font-weight: 800;
+            color: var(--text);
+            background: linear-gradient(135deg, rgba(37,99,235,0.08), rgba(6,182,212,0.08));
+        }
+
+        .dropdown a{
+            padding: 11px 14px;
+            color: var(--text);
+            text-decoration:none;
+            font-weight: 600;
+            opacity: 0.9;
+        }
+        .dropdown a:hover{
+            background: rgba(37,99,235,0.08);
+            opacity: 1;
+        }
+
+        /* === FOOTER === */
+        footer{
+            text-align:center;
+            padding: 40px 18px;
+            color: var(--muted);
+            background: rgba(255,255,255,0.55);
+            border-top: 1px solid var(--border);
+            font-size: 0.95em;
+            letter-spacing: 0.5px;
+        }
+
+        /* === ANIMATIONS === */
+        @keyframes fadeIn{
+            from { opacity:0; transform: translateY(18px); }
+            to   { opacity:1; transform: translateY(0); }
+        }
+        @keyframes fadeUp{
+            from { opacity:0; transform: translateY(22px); }
+            to   { opacity:1; transform: translateY(0); }
+        }
+
+        /* Responsive padding for nav */
+        @media (max-width: 720px){
+            nav{ padding: 14px 18px; }
+            .nav-right{ gap: 12px; }
+        }
+    </style>
+</head>
+
+<body>
+
+<nav>
+    <h1><span class="logo-dot"></span> CARWORLD</h1>
+
+    <div class="nav-right">
+        <a href="#cars">Models</a>
+        <a href="/about">About</a>
+        <a href="/contact">Contact</a>
+
+        <span th:if="${currentUser == null}">
+            <a class="nav-link-accent" href="/sign_up">Sign up</a>
+            <a class="nav-link-accent" href="/sign_in">Sign in</a>
+        </span>
+
+        <div class="profile" th:if="${currentUser != null}">
+            <div class="avatar" onclick="toggleMenu()">
+                <span th:text="${#strings.substring(currentUser.name,0,1)}"></span>
+            </div>
+
+            <div class="dropdown" id="profileMenu">
+                <p th:text="${currentUser.name}"></p>
+                <a href="/profile">👤 Profile</a>
+                <a href="/settings">⚙ Settings</a>
+                <a href="/exit">🚪 Logout</a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<section class="hero" id="hero">
+    <div class="hero-content">
+        <h1>CarWorld</h1>
+        <p>Обери свій стиль. Відчуй швидкість.</p>
+    </div>
+</section>
+
+<section class="cars-section" id="cars">
+    <h2>Наші моделі</h2>
+
+    <div class="car-grid">
+        <div class="car-card" onclick="window.location='/main?click=Audi'">
+            <img src="/images/Audi.jpg" alt="Audi">
+            <div class="content">
+                <span class="badge">Audi</span>
+                <p>Audi — потужність і точність у кожній лінії.</p>
+            </div>
+        </div>
+
+        <div class="car-card" onclick="window.location='/main?click=BMW'">
+            <img src="/images/BMW.jpg" alt="BMW">
+            <div class="content">
+                <span class="badge">BMW</span>
+                <p>BMW — чиста енергія драйву.</p>
+            </div>
+        </div>
+
+        <div class="car-card" onclick="window.location='/main?click=Mercedes'">
+            <img src="/images/Mercedes.jpg" alt="Mercedes">
+            <div class="content">
+                <span class="badge">Mercedes</span>
+                <p>Mercedes — розкіш і технології нового покоління.</p>
+            </div>
+        </div>
+
+        <div class="car-card" onclick="window.location='/main?click=Volkswagen'">
+            <img src="/images/VW.jpg" alt="VW">
+            <div class="content">
+                <span class="badge">Volkswagen</span>
+                <p>Volkswagen — надійність, що вражає.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="filter">
+        <p>Можеш також вибрати модель через фільтр</p>
+        <div class="filter-row">
+            <label for="menu">Вибери опцію:</label>
+            <select id="menu">
+                <option>Audi</option>
+                <option>BMW</option>
+                <option>Mercedes</option>
+                <option>Porsche</option>
+                <option>Volkswagen</option>
+            </select>
+            <button class="go-btn" type="button" onclick="goToSelected()">Go</button>
+        </div>
+    </div>
+</section>
+
+<footer>
+    © 2025 CarWorld | Створено з ❤️ і Java Spring
+</footer>
+
+<script>
+    const hero = document.getElementById('hero');
+    window.addEventListener('scroll', () => {
+        hero.classList.toggle('fade-out', window.scrollY > 100);
+    });
+
+    // Плавна поява карток при прокручуванні
+    const cards = document.querySelectorAll('.car-card');
+    const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) entry.target.classList.add('visible');
+        });
+    }, { threshold: 0.2 });
+    cards.forEach(card => observer.observe(card));
+
+    function toggleMenu() {
+        const menu = document.getElementById('profileMenu');
+        menu.style.display = menu.style.display === 'flex' ? 'none' : 'flex';
+    }
+
+    document.addEventListener('click', function(e) {
+        const profile = document.querySelector('.profile');
+        if (profile && !profile.contains(e.target)) {
+            const el = document.getElementById('profileMenu');
+            if (el) el.style.display = 'none';
+        }
+    });
+
+    function goToSelected(){
+        const v = document.getElementById('menu').value;
+        window.location = '/main?click=' + encodeURIComponent(v);
+    }
+</script>
+
+</body>
+</html>

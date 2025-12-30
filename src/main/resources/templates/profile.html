@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="uk" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <title>Profile</title>
+  <link rel="stylesheet" href="/css/site-light.css">
+  <style>
+    .profile-wrap{ max-width: 720px; margin: 0 auto; padding: 56px 20px; }
+    .profile-card{ padding: 22px; }
+    .row{ display:flex; gap: 14px; padding: 10px 0; border-bottom: 1px solid var(--border); }
+    .row:last-child{ border-bottom: 0; }
+    .k{ width: 140px; color: var(--muted); }
+    .v{ font-weight: 600; }
+    .actions{ display:flex; gap: 12px; flex-wrap: wrap; margin-top: 18px; }
+  </style>
+</head>
+<body>
+<div class="profile-wrap">
+  <h1>👤 Profile</h1>
+
+  <div class="card profile-card">
+    <div class="row"><div class="k">Імʼя</div><div class="v" th:text="${user.name}"></div></div>
+    <div class="row"><div class="k">Username</div><div class="v" th:text="${user.username}"></div></div>
+    <div class="row"><div class="k">Email</div><div class="v" th:text="${user.email}"></div></div>
+
+    <div class="actions">
+      <a href="/profile/edit" class="btn">✏️ Редагувати</a>
+      <a href="/profile/security" class="btn">🔒 Безпека</a>
+      <a href="/logout" class="btn btn-primary">🚪 Вийти</a>
+    </div>
+  </div>
+</div>
+</body>
+</html>

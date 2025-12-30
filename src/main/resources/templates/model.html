@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="uk" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title th:text="${infoModel.model} + ' — CarWorld'">CarWorld</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+  <!-- ✅ Правильний шлях до static -->
+  <link rel="stylesheet" th:href="@{/css/car.css}">
+</head>
+<body>
+
+<section class="car-details">
+  <div class="car-image">
+    <img th:src="@{'/images/' + ${infoModel.image}}" th:alt="${infoModel.model}">
+  </div>
+
+  <div class="car-info">
+    <h1 th:text="${infoModel.model}"></h1>
+
+    <p class="price" th:text="'Ціна: ' + ${infoModel.price} + ' €'"></p>
+
+    <div class="specs">
+      <p><strong>Макс. швидкість:</strong> <span th:text="${infoModel.topSpeed} + ' км/год'"></span></p>
+      <p><strong>Тип палива:</strong> <span th:text="${infoModel.fuelType}"></span></p>
+    </div>
+
+    <p class="desc" th:text="${infoModel.description}"></p>
+
+    <div class="actions">
+      <a th:href="@{/}" class="back-btn">⬅ Назад</a>
+      <button class="buy-btn" type="button">🚗 Замовити</button>
+    </div>
+  </div>
+</section>
+
+</body>
+</html>

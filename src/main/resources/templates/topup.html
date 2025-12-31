@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="uk" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>Top up</title>
+    <link rel="stylesheet" href="/css/site-light.css">
+    <style>
+        .wrap{ max-width:520px; margin:0 auto; padding:60px 18px; }
+        .card{ padding:18px; }
+        .row{ display:flex; gap:10px; margin-top:12px; }
+        input{ width:100%; padding:12px; border:1px solid var(--border); border-radius:12px; }
+        button{ padding:12px 14px; border-radius:12px; border:1px solid var(--border); cursor:pointer; }
+    </style>
+</head>
+<body>
+<div class="wrap">
+    <h1>➕ Поповнення бюджету</h1>
+
+    <div class="card">
+        <p>Поточний баланс: <b th:text="${user.budget}"></b></p>
+
+        <form method="post" action="/profile/topup">
+            <div class="row">
+                <input type="number" name="amount" step="0.01" min="1" placeholder="Сума (наприклад 50)" required>
+                <button type="submit">Поповнити</button>
+            </div>
+        </form>
+
+        <p style="margin-top:12px; color: var(--muted);">
+            Це тестова “іграшкова” функція без реальних платежів.
+        </p>
+    </div>
+
+    <div style="margin-top:14px;">
+        <a href="/profile">← Назад</a>
+    </div>
+</div>
+</body>
+</html>

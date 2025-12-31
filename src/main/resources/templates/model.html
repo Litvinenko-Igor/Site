@@ -10,7 +10,6 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
 
-  <!-- ✅ Правильний шлях до static -->
   <link rel="stylesheet" th:href="@{/css/car.css}">
 </head>
 <body>
@@ -33,7 +32,7 @@
     <p class="desc" th:text="${infoModel.description}"></p>
 
     <div class="actions">
-      <a th:href="@{/}" class="back-btn">⬅ Назад</a>
+      <a th:href="@{/car}" class="back-btn">⬅ Назад</a>
       <button class="buy-btn" type="button">🚗 Замовити</button>
     </div>
   </div>

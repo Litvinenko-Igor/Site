@@ -7,7 +7,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+
 
 
 @Service
@@ -48,4 +48,16 @@ public class UserService extends CrudService<User, Long> {
         user.setEmail(email);
         return userRepository.save(user);
     }
+
+    @Transactional
+    public User addBudget(Long userId, double amount) {
+        if (amount <= 0) throw new IllegalArgumentException("Amount must be > 0");
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        user.setBudget(user.getBudget() + amount);
+        return userRepository.save(user);
+    }
+
 }

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="uk" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <title>Market</title>
+  <link rel="stylesheet" href="/css/site-light.css">
+
+  <style>
+    /* ===== Animated background ===== */
+    .scene{
+      min-height:100vh;
+      position:relative;
+      overflow:hidden;
+      background: radial-gradient(1200px 600px at 10% 10%, rgba(72, 239, 189,.18), transparent 55%),
+      radial-gradient(900px 500px at 90% 25%, rgba(99, 102, 241,.15), transparent 55%),
+      radial-gradient(900px 500px at 60% 90%, rgba(34, 197, 94,.12), transparent 55%),
+      linear-gradient(180deg, rgba(10,10,20,.04), rgba(10,10,20,.00));
+    }
+
+    .blob{
+      position:absolute;
+      filter: blur(30px);
+      opacity:.75;
+      transform: translate3d(0,0,0);
+      animation: float 10s ease-in-out infinite;
+      border-radius: 999px;
+      pointer-events:none;
+    }
+    .blob.one{ width:420px; height:420px; left:-120px; top:-140px; background: rgba(72,239,189,.45); animation-duration: 12s;}
+    .blob.two{ width:520px; height:520px; right:-180px; top:60px; background: rgba(99,102,241,.35); animation-duration: 14s;}
+    .blob.three{ width:520px; height:520px; left:20%; bottom:-260px; background: rgba(34,197,94,.30); animation-duration: 16s;}
+
+    @keyframes float{
+      0%{ transform: translate3d(0,0,0) scale(1); }
+      50%{ transform: translate3d(40px,-25px,0) scale(1.05); }
+      100%{ transform: translate3d(0,0,0) scale(1); }
+    }
+
+    /* ===== Layout ===== */
+    .wrap{ max-width: 1100px; margin: 0 auto; padding: 44px 18px 70px; position:relative; z-index:2; }
+    .hero{
+      display:flex; align-items:flex-end; justify-content:space-between; gap:14px;
+      margin-bottom:16px;
+    }
+    .hero h1{ margin:0; font-size: 34px; letter-spacing: .2px; }
+    .sub{ margin: 8px 0 0; color: var(--muted); }
+
+    .pill{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:10px 14px; border:1px solid var(--border);
+      border-radius: 999px; background: rgba(255,255,255,.6);
+      backdrop-filter: blur(10px);
+      font-size: 13px;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 14px;
+      margin-top: 18px;
+    }
+
+    .card{
+      border:1px solid var(--border);
+      border-radius: 18px;
+      background: rgba(255,255,255,.72);
+      backdrop-filter: blur(12px);
+      overflow:hidden;
+      box-shadow: 0 8px 30px rgba(0,0,0,.06);
+      transition: transform .18s ease, box-shadow .18s ease;
+      text-decoration:none;
+      color: inherit;
+      display:block;
+    }
+    .card:hover{ transform: translateY(-3px); box-shadow: 0 14px 40px rgba(0,0,0,.10); }
+
+    .thumb{
+      width:100%;
+      height: 170px;
+      object-fit: cover;
+      display:block;
+      background: #f3f3f3;
+    }
+
+    .body{ padding: 14px; }
+    .title{ margin: 0 0 6px; font-weight: 800; font-size: 16px; }
+    .desc{ margin:0 0 10px; color: var(--muted); font-size: 13px; line-height:1.35; height: 36px; overflow:hidden; }
+    .meta{ display:flex; justify-content:space-between; gap:10px; font-size:13px; margin-top:6px; }
+    .badge{
+      display:inline-block;
+      padding: 5px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      font-size:12px;
+      background: rgba(255,255,255,.75);
+    }
+
+    .empty{
+      margin-top: 18px;
+      padding: 18px;
+      border: 1px dashed var(--border);
+      border-radius: 16px;
+      color: var(--muted);
+      background: rgba(255,255,255,.6);
+      backdrop-filter: blur(10px);
+    }
+
+    .top-actions{ display:flex; gap:10px; align-items:center; }
+    .mini-btn{
+      padding:10px 14px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.7);
+      text-decoration:none;
+      color: inherit;
+      font-weight: 600;
+    }
+  </style>
+</head>
+
+<body>
+<div class="scene">
+  <div class="blob one"></div>
+  <div class="blob two"></div>
+  <div class="blob three"></div>
+
+  <div class="wrap">
+    <div class="hero">
+      <div>
+        <h1>🛒 Market</h1>
+        <p class="sub">Тут показані всі машини, які зараз продаються.</p>
+      </div>
+
+      <div class="top-actions">
+        <span class="pill" th:if="${currentUser != null}">
+          👤 <b th:text="${currentUser.username}"></b>
+          • 💶 <span th:text="${currentUser.budget}"></span>
+        </span>
+
+        <a class="mini-btn" th:if="${currentUser == null}" href="/sign_in">Sign in</a>
+        <a class="mini-btn" th:if="${currentUser != null}" href="/profile">Profile</a>
+      </div>
+    </div>
+
+    <div class="empty" th:if="${autos == null or #lists.isEmpty(autos)}">
+      Зараз на ринку немає машин 🥲
+    </div>
+
+    <div class="grid" th:if="${autos != null and !#lists.isEmpty(autos)}">
+      <a class="card" th:each="car : ${autos}" th:href="@{/market/{id}(id=${car.id})}">
+        <img class="thumb" th:if="${car.imagePath != null}" th:src="${car.imagePath}" alt="car photo">
+        <div class="thumb" th:if="${car.imagePath == null}"></div>
+
+        <div class="body">
+          <p class="title" th:text="${car.brand + ' ' + car.model}"></p>
+          <p class="desc" th:text="${car.description}"></p>
+
+          <div class="meta">
+            <span>💶 <b th:text="${car.price}"></b></span>
+            <span>⚡ <b th:text="${car.topSpeed}"></b></span>
+          </div>
+
+          <div class="meta">
+            <span>⛽ <b th:text="${car.fuelType}"></b></span>
+            <span class="badge" th:text="${car.status}"></span>
+          </div>
+        </div>
+      </a>
+    </div>
+  </div>
+</div>
+</body>
+</html>

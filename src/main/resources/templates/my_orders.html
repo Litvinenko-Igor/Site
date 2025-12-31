@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="uk" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>Мої авто</title>
+    <link rel="stylesheet" href="/css/site-light.css">
+
+    <style>
+        .wrap { max-width: 980px; margin: 0 auto; padding: 48px 20px; }
+        .top { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:18px; }
+        .grid { display:grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px; }
+        .card { border: 1px solid var(--border); border-radius: 16px; overflow:hidden; background: var(--card); }
+        .thumb { width:100%; height: 160px; background: #f3f3f3; display:block; object-fit:cover; }
+        .body { padding: 14px; }
+        .title { font-weight: 700; font-size: 16px; margin: 0 0 6px; }
+        .muted { color: var(--muted); font-size: 13px; margin: 0 0 8px; }
+        .row { display:flex; justify-content:space-between; font-size: 13px; margin-top: 6px; }
+        .badge { display:inline-block; font-size: 12px; padding: 4px 10px; border-radius: 999px; border: 1px solid var(--border); }
+        .empty { padding: 18px; border: 1px dashed var(--border); border-radius: 14px; color: var(--muted); }
+    </style>
+</head>
+<body>
+
+<div class="wrap">
+    <div class="top">
+        <div>
+            <h1 style="margin:0;">🚗 Мої авто</h1>
+            <p class="muted" style="margin:6px 0 0;">Тут показані всі машини, які належать тобі.</p>
+        </div>
+        <a class="btn btn-primary" href="/profile/make_orders">+ Додати авто</a>
+    </div>
+
+    <div class="empty" th:if="${autos == null or #lists.isEmpty(autos)}">
+        У тебе ще немає машин. Натисни “Додати авто”.
+    </div>
+
+    <div class="grid" th:if="${autos != null and !#lists.isEmpty(autos)}">
+        <div class="card" th:each="car : ${autos}">
+            <img class="thumb"
+                 th:if="${car.imagePath != null}"
+                 th:src="${car.imagePath}"
+                 alt="car photo">
+
+            <!-- якщо нема фото -->
+            <div class="thumb" th:if="${car.imagePath == null}"></div>
+
+            <div class="body">
+                <p class="title" th:text="${car.brand + ' ' + car.model}"></p>
+
+                <p class="muted" th:text="${car.description}"></p>
+
+                <div class="row">
+                    <span>💶 Ціна</span>
+                    <strong th:text="${car.price}"></strong>
+                </div>
+
+                <div class="row">
+                    <span>⚡ Top speed</span>
+                    <strong th:text="${car.topSpeed}"></strong>
+                </div>
+
+                <div class="row">
+                    <span>⛽ Паливо</span>
+                    <strong th:text="${car.fuelType}"></strong>
+                </div>
+
+                <div style="margin-top:10px;">
+                    <span class="badge" th:text="${car.status}"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

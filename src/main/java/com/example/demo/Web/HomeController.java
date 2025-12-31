@@ -5,7 +5,6 @@ import com.example.demo.Data.User.UserService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -18,7 +17,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class HomeController {
 
     private final UserService userService;
-    private final PasswordEncoder passwordEncoder;
     private final HttpSession session;
 
     @GetMapping("/")
@@ -89,7 +87,7 @@ public class HomeController {
             return "sign_up";
         }
 
-        userService.createUser(userDTO.getName(), userDTO.getUsername(), userDTO.getEmail(), passwordEncoder.encode(userDTO.getPassword()));
+        userService.createUser(userDTO.getName(), userDTO.getUsername(), userDTO.getEmail(), userDTO.getPassword());
         model.addAttribute("message", "Користувач успішно зареєстрований ✅");
         return "sign_in";
     }
@@ -99,15 +97,5 @@ public class HomeController {
         session.invalidate();
         redirectAttributes.addFlashAttribute("message", "Ви вийшли з акаунту");
         return "redirect:/sign_in";
-    }
-
-    @GetMapping("/profile")
-    public String profile(Model model) {
-        User currentUser = (User) session.getAttribute("currentUser");
-        if (currentUser == null) {
-            return "redirect:/sign_in";
-        }
-        model.addAttribute("user", currentUser);
-        return "profile";
     }
 }

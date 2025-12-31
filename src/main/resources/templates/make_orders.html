@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="uk" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Create Auto</title>
+  <link rel="stylesheet" th:href="@{/css/orders.css}">
+</head>
+<body>
+<div class="page">
+  <div class="layout">
+
+    <aside class="side">
+      <div class="brand">
+        <div class="logo">🚗</div>
+        <div>
+          <div class="title">Create Auto</div>
+          <div class="sub">Заповни дані — і створимо оголошення</div>
+        </div>
+      </div>
+
+      <div class="car-card">
+        <svg class="car" viewBox="0 0 640 220" aria-hidden="true">
+          <path d="M110 140c10-40 35-70 70-78l250-55c26-6 52 3 68 22l74 92c10 12 18 26 18 42v14c0 16-13 29-29 29H80c-16 0-29-13-29-29v-14c0-9 2-16 6-23z" fill="rgba(255,255,255,.65)"/>
+          <path d="M170 80h220c18 0 34 8 44 22l30 40H132l18-38c6-14 20-24 35-24z" fill="rgba(37,99,235,.18)"/>
+          <circle cx="170" cy="175" r="30" fill="rgba(15,23,42,.14)"/>
+          <circle cx="470" cy="175" r="30" fill="rgba(15,23,42,.14)"/>
+          <circle cx="170" cy="175" r="18" fill="rgba(255,255,255,.75)"/>
+          <circle cx="470" cy="175" r="18" fill="rgba(255,255,255,.75)"/>
+        </svg>
+
+        <div class="hint">
+          <div class="hint-title">Підказка</div>
+          <div class="hint-text">
+            Fuel type — випадаючий список. Фото — завантажується з ПК.
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <main class="panel">
+      <form class="form"
+            th:action="@{/profile/make_orders}"
+            th:object="${auto}"
+            method="post"
+            enctype="multipart/form-data">
+
+        <section class="block">
+          <div class="block-title">Основне</div>
+
+          <div class="grid">
+            <div class="field">
+              <label>Brand</label>
+              <input type="text" th:field="*{brand}" placeholder="BMW, Audi...">
+              <div class="error" th:if="${#fields.hasErrors('brand')}" th:errors="*{brand}"></div>
+            </div>
+
+            <div class="field">
+              <label>Model</label>
+              <input type="text" th:field="*{model}" placeholder="M3, A6...">
+              <div class="error" th:if="${#fields.hasErrors('model')}" th:errors="*{model}"></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="block">
+          <div class="block-title">Технічні дані</div>
+
+          <div class="grid">
+            <div class="field">
+              <label>Price (€)</label>
+              <input type="number" step="0.01" th:field="*{price}" placeholder="19999.99">
+              <div class="error" th:if="${#fields.hasErrors('price')}" th:errors="*{price}"></div>
+            </div>
+
+            <div class="field">
+              <label>Top speed (km/h)</label>
+              <input type="number" th:field="*{topSpeed}" placeholder="250">
+              <div class="error" th:if="${#fields.hasErrors('topSpeed')}" th:errors="*{topSpeed}"></div>
+            </div>
+
+            <div class="field">
+              <label>Fuel type</label>
+              <select th:field="*{fuelType}">
+                <option value="" selected disabled>Choose...</option>
+                <option value="Benzine">Benzine</option>
+                <option value="DIESEL">Diesel</option>
+                <option value="ELECTRIC">Electric</option>
+                <option value="HYBRID">Hybrid</option>
+                <option value="LPG">LPG</option>
+              </select>
+              <div class="error" th:if="${#fields.hasErrors('fuelType')}" th:errors="*{fuelType}"></div>
+            </div>
+
+            <div class="field file">
+              <label>Photo (upload)</label>
+
+              <input type="file" th:field="*{image}" accept="image/*">
+              <div class="mini">PNG/JPG, до ~5MB</div>
+
+              <div class="error" th:if="${#fields.hasErrors('image')}" th:errors="*{image}"></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="block">
+          <div class="block-title">Опис</div>
+
+          <div class="field">
+            <textarea th:field="*{description}" placeholder="Короткий опис авто..."></textarea>
+            <div class="error" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></div>
+          </div>
+        </section>
+
+        <div class="actions">
+          <button class="btn" type="submit">Create</button>
+          <a class="ghost" href="/profile">Cancel</a>
+        </div>
+      </form>
+    </main>
+  </div>
+</div>
+</body>
+</html>

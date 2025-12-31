@@ -1,8 +1,10 @@
 package com.example.demo.Data.Auto;
 
+import com.example.demo.Data.User.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
 
 @Getter
 @Setter
@@ -27,7 +29,7 @@ public class Auto {
     private int topSpeed;
 
     @Column(nullable = false)
-    private String image;
+    private String imagePath;
 
     @Column(name = "fuel_type")
     private String fuelType;
@@ -35,15 +37,24 @@ public class Auto {
     @Column(nullable = false)
     private String description;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "owner_id")
+    private User owner;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private AutoStatus status = AutoStatus.NOT_FOR_SALE;
+
     public Auto() {}
 
-    public Auto(String brand, String model, double price, int topSpeed, String image, String fuelType, String description) {
+    public Auto(String brand, String model, double price, int topSpeed, String imagePath, String fuelType, String description, AutoStatus status) {
         this.brand = brand;
         this.model = model;
         this.price = price;
         this.topSpeed = topSpeed;
-        this.image = image;
+        this.imagePath = imagePath;
         this.fuelType = fuelType;
         this.description = description;
+        this.status = status;
     }
 }

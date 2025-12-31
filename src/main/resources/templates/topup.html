@@ -17,7 +17,7 @@
     <h1>➕ Поповнення бюджету</h1>
 
     <div class="card">
-        <p>Поточний баланс: <b th:text="${user.budget}"></b></p>
+        <p>Поточний баланс: <b th:text="${user.budget} + ' €'"></b></p>
 
         <form method="post" action="/profile/topup">
             <div class="row">

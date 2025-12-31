@@ -58,7 +58,7 @@
                 <p class="title" th:text="${car.brand + ' ' + car.model}"></p>
                 <p class="muted" th:text="${car.description}"></p>
 
-                <div class="row"><span>💶 Ціна</span><b th:text="${car.price}"></b></div>
+                <div class="row"><span>💶 Ціна</span><b th:text="${car.price} + ' €'"></b></div>
                 <div class="row"><span>⚡ Top speed</span><b th:text="${car.topSpeed}"></b></div>
                 <div class="row"><span>⛽ Паливо</span><b th:text="${car.fuelType}"></b></div>
                 <div class="row"><span>📌 Статус</span><b th:text="${car.status}"></b></div>

@@ -17,7 +17,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class HomeController {
 
     private final UserService userService;
-    private final HttpSession session;
 
     @GetMapping("/")
     public String home() {
@@ -47,6 +46,7 @@ public class HomeController {
     public String handleSignIn(
             @RequestParam String email,
             @RequestParam String password,
+            HttpSession session,
             Model model) {
 
         model.addAttribute("email", email);
@@ -93,7 +93,7 @@ public class HomeController {
     }
 
     @GetMapping("/exit")
-    public String logout(RedirectAttributes redirectAttributes) {
+    public String logout(RedirectAttributes redirectAttributes, HttpSession session) {
         session.invalidate();
         redirectAttributes.addFlashAttribute("message", "Ви вийшли з акаунту");
         return "redirect:/sign_in";

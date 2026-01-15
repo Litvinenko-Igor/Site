@@ -76,7 +76,7 @@
 </head>
 <body>
 
-<h1>Наші автомобілі</h1>
+<h1>Our Autos</h1>
 
 <div class="car-container">
     <div class="car-card" th:each="car : ${brands}" th:if="${infoModel == null}">
@@ -85,15 +85,14 @@
         </a>
         <p><strong th:text="${car.model}"></strong></p>
         <div class="price" th:text="${car.price} + ' €'"></div>
-        <p th:text="'Макс. швидкість: ' + ${car.topSpeed} + ' км/год'"></p>
-        <p th:text="'Тип палива: ' + ${car.fuelType}"></p>
+        <p th:text="'Top speed: ' + ${car.topSpeed} + ' km/h'"></p>
+        <p th:text="'Fuel type: ' + ${car.fuelType}"></p>
         <p th:text="${car.description}"></p>
     </div>
 
 </div>
 
-<a href="/" class="btn btn-primary back-btn">⬅ На головну</a>
-
+<a href="/" class="btn btn-primary back-btn">⬅ Back to home</a>
 <script>
     const cards = document.querySelectorAll('.car-card');
     const observer = new IntersectionObserver(entries => {

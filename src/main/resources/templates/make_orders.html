@@ -29,9 +29,9 @@
         </svg>
 
         <div class="hint">
-          <div class="hint-title">Підказка</div>
+          <div class="hint-title">Hint</div>
           <div class="hint-text">
-            Fuel type — випадаючий список. Фото — завантажується з ПК.
+            Fuel type — dropdown list. Photo — uploaded from your PC.
           </div>
         </div>
       </div>
@@ -45,7 +45,7 @@
             enctype="multipart/form-data">
 
         <section class="block">
-          <div class="block-title">Основне</div>
+          <div class="block-title">Basis</div>
 
           <div class="grid">
             <div class="field">
@@ -106,7 +106,7 @@
           <div class="block-title">Опис</div>
 
           <div class="field">
-            <textarea th:field="*{description}" placeholder="Короткий опис авто..."></textarea>
+            <textarea th:field="*{description}" placeholder="Short description about auto..."></textarea>
             <div class="error" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></div>
           </div>
         </section>

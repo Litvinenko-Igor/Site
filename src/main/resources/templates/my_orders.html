@@ -24,14 +24,14 @@
 <div class="wrap">
     <div class="top">
         <div>
-            <h1 style="margin:0;">🚗 Мої авто</h1>
-            <p class="muted" style="margin:6px 0 0;">Тут показані всі машини, які належать тобі.</p>
+            <h1 style="margin:0;">🚗 My cars</h1>
+            <p class="muted" style="margin:6px 0 0;">All cars that belong to you are shown here.</p>
         </div>
-        <a class="btn btn-primary" href="/profile/make_orders">+ Додати авто</a>
+        <a class="btn btn-primary" href="/profile/make_orders">+ Add car</a>
     </div>
 
     <div class="empty" th:if="${autos == null or #lists.isEmpty(autos)}">
-        У тебе ще немає машин. Натисни “Додати авто”.
+        You don’t have any cars yet. Click “Add car”.
     </div>
 
     <div class="grid" th:if="${autos != null and !#lists.isEmpty(autos)}">
@@ -41,7 +41,6 @@
                  th:src="${car.imagePath}"
                  alt="car photo">
 
-            <!-- якщо нема фото -->
             <div class="thumb" th:if="${car.imagePath == null}"></div>
 
             <div class="body">
@@ -50,7 +49,7 @@
                 <p class="muted" th:text="${car.description}"></p>
 
                 <div class="row">
-                    <span>💶 Ціна</span>
+                    <span>💶 Price</span>
                     <strong th:text="${car.price} + ' €'"></strong>
                 </div>
 
@@ -60,7 +59,7 @@
                 </div>
 
                 <div class="row">
-                    <span>⛽ Паливо</span>
+                    <span>⛽ Fuel</span>
                     <strong th:text="${car.fuelType}"></strong>
                 </div>
 

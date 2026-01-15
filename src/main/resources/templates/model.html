@@ -22,18 +22,18 @@
   <div class="car-info">
     <h1 th:text="${infoModel.model}"></h1>
 
-    <p class="price" th:text="'Ціна: ' + ${infoModel.price} + ' €'"></p>
+    <p class="price" th:text="'Price: ' + ${infoModel.price} + ' €'"></p>
 
     <div class="specs">
-      <p><strong>Макс. швидкість:</strong> <span th:text="${infoModel.topSpeed} + ' км/год'"></span></p>
-      <p><strong>Тип палива:</strong> <span th:text="${infoModel.fuelType}"></span></p>
+      <p><strong>Top speed:</strong> <span th:text="${infoModel.topSpeed} + ' km/h'"></span></p>
+      <p><strong>Fuel type:</strong> <span th:text="${infoModel.fuelType}"></span></p>
     </div>
 
     <p class="desc" th:text="${infoModel.description}"></p>
 
     <div class="actions">
-      <a th:href="@{/car}" class="back-btn">⬅ Назад</a>
-      <button class="buy-btn" type="button">🚗 Замовити</button>
+      <a th:href="@{/}" class="back-btn">⬅ Back</a>
+      <button class="buy-btn" type="button">🚗 Order</button>
     </div>
   </div>
 </section>

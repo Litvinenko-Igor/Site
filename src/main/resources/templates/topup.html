@@ -14,26 +14,19 @@
 </head>
 <body>
 <div class="wrap">
-    <h1>➕ Поповнення бюджету</h1>
+    <h1>➕ Top up budget</h1>
 
-    <div class="card">
-        <p>Поточний баланс: <b th:text="${user.budget} + ' €'"></b></p>
+    <p>Current balance: <b th:text="${user.budget} + ' €'"></b></p>
 
-        <form method="post" action="/profile/topup">
-            <div class="row">
-                <input type="number" name="amount" step="0.01" min="1" placeholder="Сума (наприклад 50)" required>
-                <button type="submit">Поповнити</button>
-            </div>
-        </form>
+    <input type="number" name="amount" step="0.01" min="1" placeholder="Amount (e.g. 50)" required>
+    <button type="submit">Top up</button>
 
-        <p style="margin-top:12px; color: var(--muted);">
-            Це тестова “іграшкова” функція без реальних платежів.
-        </p>
-    </div>
+    <p style="margin-top:12px; color: var(--muted);">
+        This is a test “toy” feature — no real payments.
+    </p>
 
-    <div style="margin-top:14px;">
-        <a href="/profile">← Назад</a>
-    </div>
+    <a href="/profile">← Back</a>
+
 </div>
 </body>
 </html>

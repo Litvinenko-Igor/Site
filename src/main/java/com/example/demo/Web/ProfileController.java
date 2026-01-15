@@ -97,7 +97,7 @@ public class ProfileController {
         try {
             User updated = userService.addBudget(currentUser.getId(), amount);
             session.setAttribute("currentUser", updated);
-            ra.addFlashAttribute("message", "Баланс поповнено ✅");
+            ra.addFlashAttribute("message", "Budget replenished ✅");
         } catch (Exception e) {
             ra.addFlashAttribute("error", e.getMessage());
         }

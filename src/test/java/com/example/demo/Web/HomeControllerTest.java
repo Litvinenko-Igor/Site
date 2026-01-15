@@ -50,24 +50,26 @@ class HomeControllerTest {
     @Test
     void postSignIn_invalidEmail_showsSignInWithError_andDoesNotCallService() throws Exception {
         mvc.perform(MockMvcRequestBuilders.post("/sign_in")
-                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                .param("email", "test@gmail.com")
-                .param("password", "12345678"))
+                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                        .param("email", "це-не-імейл")
+                        .param("password", "12345678"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("sign_in"))
                 .andExpect(model().attributeExists("error"));
+
         verifyNoInteractions(userService);
     }
 
     @Test
     void postSignIn_shortPassword_showsSignInWithError_andDoesNotCallService() throws Exception {
         mvc.perform(MockMvcRequestBuilders.post("/sign_in")
-                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                .param("email", "test@gmail.com")
-                .param("password", "12345678"))
+                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                        .param("email", "test@gmail.com")
+                        .param("password", "123"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("sign_in"))
                 .andExpect(model().attributeExists("error"));
+
         verifyNoInteractions(userService);
     }
     @Test

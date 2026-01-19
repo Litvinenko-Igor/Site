@@ -53,12 +53,12 @@ public class HomeController {
         model.addAttribute("password", password);
 
         if (!email.endsWith("@gmail.com")) {
-            model.addAttribute("error", "Пошта має закінчуватись на @gmail.com ❌");
+            model.addAttribute("error", "Email must end with @gmail.com ❌");
             return "sign_in";
         }
 
         if (password.length() < 8) {
-            model.addAttribute("error", "Пароль має містити щонайменше 8 символів ❌");
+            model.addAttribute("error", "Password must be at least 8 characters long ❌");
             return "sign_in";
         }
 
@@ -88,14 +88,15 @@ public class HomeController {
         }
 
         userService.createUser(userDTO.getName(), userDTO.getUsername(), userDTO.getEmail(), userDTO.getPassword());
-        model.addAttribute("message", "Користувач успішно зареєстрований ✅");
+        model.addAttribute("message", "User successfully registered ✅");
         return "sign_in";
     }
 
     @GetMapping("/exit")
     public String logout(RedirectAttributes redirectAttributes, HttpSession session) {
         session.invalidate();
-        redirectAttributes.addFlashAttribute("message", "Ви вийшли з акаунту");
+        redirectAttributes.addFlashAttribute("message", "You have logged out");
         return "redirect:/sign_in";
     }
+
 }

@@ -208,10 +208,20 @@ public class TelegramBot extends TelegramLongPollingBot {
         SendPhoto photo = new SendPhoto();
         photo.setChatId(String.valueOf(chatId));
         photo.setCaption(textToSend);
-        System.out.println(callbackQuery);
-        InputStream is = getClass().getResourceAsStream("/" + brand.getBrand() + "/" + callbackQuery + ".jpg");
-        if (is != null) photo.setPhoto(new InputFile(is, callbackQuery + ".jpg"));
 
+        String imagePath = "static/images/" + callbackQuery + ".jpg";
+        System.out.println("Шукаю фото за шляхом: " + imagePath);
+
+        InputStream is = Thread.currentThread()
+                .getContextClassLoader()
+                .getResourceAsStream(imagePath);
+
+        if (is == null) {
+            System.err.println("ПОМИЛКА: Фото не знайдено! Перевір назву папки та файлу: " + imagePath);
+            return;
+        }
+
+        photo.setPhoto(new InputFile(is, callbackQuery + ".jpg"));
 
         InlineKeyboardButton btn = new InlineKeyboardButton();
         btn.setText("characteristics");
@@ -229,6 +239,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         try {
             execute(photo);
         } catch (TelegramApiException e) {
+            e.printStackTrace();
             log.error("Error sending photo: " + e.getMessage());
         }
     }

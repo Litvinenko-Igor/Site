@@ -8,28 +8,27 @@ import lombok.Setter;
 @Setter
 public class UserDTO {
 
-    @NotNull(message = "Name обов'язковий.")
-    @Size(min = 3, max = 50, message = "Name має бути від 3 до 50 символів.")
+    @NotBlank(message = "Name is required.")
+    @Size(min = 3, max = 50, message = "Name must be between 3 and 50 characters.")
     private String name;
 
-
-    @NotNull(message = "Username обов'язковий.")
-    @Size(min = 3, max = 50, message = "Username має бути від 3 до 50 символів.")
+    @NotBlank(message = "Username is required.")
+    @Size(min = 3, max = 50, message = "Username must be between 3 and 50 characters.")
     private String username;
 
-    @NotNull(message = "Password обов'язковий для заповнення.")
-    @Size(min = 8, message = "Password має містити мінімум 8 символів.")
+    @NotBlank(message = "Password is required.")
+    @Size(min = 8, message = "Password must be at least 8 characters long.")
     private String password;
 
-    @NotBlank(message = "Підтвердження пароля обов'язкове")
+    @NotBlank(message = "Password confirmation is required.")
     private String confirmPassword;
 
-    @NotNull(message = "Email обов'язковий для заповнення.")
-    @Email(message = "Введи коректну email-адресу.")
+    @NotBlank(message = "Email is required.")
+    @Email(message = "Please enter a valid email address.")
     @Pattern(
             regexp = "^[A-Za-z0-9._%+-]+@gmail\\.com$",
-            message = "Email має закінчуватись на @gmail.com"
+            message = "Email must end with @gmail.com"
     )
     private String email;
-
 }
+

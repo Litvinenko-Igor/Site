@@ -44,16 +44,17 @@ public class MarketController {
     public String buy(@PathVariable Long id, RedirectAttributes ra) {
         User currentUser = (User) session.getAttribute("currentUser");
         if (currentUser == null) {
-            ra.addFlashAttribute("error", "Спочатку увійди в акаунт, щоб купити авто.");
+            ra.addFlashAttribute("error", "Please sign in first to buy a car.");
             return "redirect:/sign_in";
         }
 
         try {
             marketService.buy(id, currentUser.getId());
-            ra.addFlashAttribute("message", "Покупка успішна ✅");
+            ra.addFlashAttribute("message", "Purchase successful ✅");
         } catch (Exception e) {
             ra.addFlashAttribute("error", e.getMessage());
         }
+
 
         return "redirect:/market/" + id;
     }

@@ -10,24 +10,25 @@ import org.springframework.web.multipart.MultipartFile;
 @Getter
 @Setter
 public class AutoDTO {
-    @NotBlank(message="Brand обов'язковий")
+
+    @NotBlank(message = "Brand is required")
     private String brand;
 
-    @NotBlank(message="Model обов'язковий")
+    @NotBlank(message = "Model is required")
     private String model;
 
-    @Positive(message="Price має бути > 0")
+    @Positive(message = "Price must be greater than 0")
     private double price;
 
-    @Positive(message="TopSpeed має бути > 0")
+    @Positive(message = "Top speed must be greater than 0")
     private int topSpeed;
 
-    @NotNull(message="Image обов'язковий")
+    @NotNull(message = "Image is required")
     private MultipartFile image;
 
-    @NotBlank(message="FuelType обов'язковий")
+    @NotBlank(message = "Fuel type is required")
     private String fuelType;
 
-    @NotBlank(message="Description обов'язковий")
+    @NotBlank(message = "Description is required")
     private String description;
 }

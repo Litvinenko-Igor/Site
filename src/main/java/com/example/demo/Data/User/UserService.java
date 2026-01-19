@@ -25,10 +25,10 @@ public class UserService extends CrudService<User, Long> {
 
     public User login(String email, String rawPassword) {
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new IllegalArgumentException("Користувача не знайдено"));
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
 
         if (!passwordEncoder.matches(rawPassword, user.getPassword())) {
-            throw new IllegalArgumentException("Невірний пароль");
+            throw new IllegalArgumentException("Incorrect password");
         }
         return user;
     }
